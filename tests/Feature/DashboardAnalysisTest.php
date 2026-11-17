@@ -64,9 +64,9 @@ test('the dashboard shows the daily analysis for the selected range', function (
             ->where('days.'.($expectedRange - 1).'.date', now()->toDateString())
         );
 })->with([
-    'default range' => [null, 30],
+    'default range is today' => [null, 1],
     'today only' => [1, 1],
     'seven days' => [7, 7],
     'ninety days' => [90, 90],
-    'unsupported range falls back to default' => [365, 30],
+    'unsupported range falls back to today' => [365, 1],
 ]);

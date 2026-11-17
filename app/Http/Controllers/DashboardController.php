@@ -16,7 +16,7 @@ class DashboardController extends Controller
      */
     public const array RANGES = [1, 7, 14, 30, 90];
 
-    public const int DEFAULT_RANGE = 30;
+    public const int DEFAULT_RANGE = 1;
 
     /**
      * Display the daily analysis of bets, commission and payouts.
