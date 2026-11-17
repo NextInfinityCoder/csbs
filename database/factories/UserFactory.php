@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Station;
 use App\Models\User;
+use App\UserType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -28,6 +30,7 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
+            'type' => UserType::Admin,
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
             'two_factor_secret' => null,
@@ -55,6 +58,37 @@ class UserFactory extends Factory
             'two_factor_secret' => encrypt('secret'),
             'two_factor_recovery_codes' => encrypt(json_encode(['recovery-code-1'])),
             'two_factor_confirmed_at' => now(),
+        ]);
+    }
+
+    /**
+     * Indicate that the user is a cashier, optionally assigned to a station.
+     */
+    public function cashier(?Station $station = null): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'type' => UserType::Cashier,
+            'station_id' => $station?->id,
+        ]);
+    }
+
+    /**
+     * Indicate that the user is an admin.
+     */
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'type' => UserType::Admin,
+        ]);
+    }
+
+    /**
+     * Indicate that the user is an encoder.
+     */
+    public function encoder(): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'type' => UserType::Encoder,
         ]);
     }
 }

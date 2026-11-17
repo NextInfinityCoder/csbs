@@ -1,3 +1,10 @@
 export type * from './auth';
+export type * from './bet';
+export type * from './cashier';
+export type * from './event';
+export type * from './fight';
 export type * from './navigation';
+export type * from './pagination';
+export type * from './station';
 export type * from './ui';
+export type * from './dashboard';
