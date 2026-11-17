@@ -26,7 +26,7 @@ class SetupSeeder extends Seeder
         foreach (range(1, self::STATION_COUNT) as $number) {
             $station = Station::firstOrCreate(['name' => "Station {$number}"]);
 
-            $this->createUser("Cashier {$number}", "cashier{$number}@example.com", UserType::Cashier, $station);
+            $this->createUser("Cashier {$number}", "cashier{$number}@csbs.com", UserType::Cashier, $station);
         }
     }
 
