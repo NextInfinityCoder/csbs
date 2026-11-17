@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BetController;
 use App\Http\Controllers\CashierController;
+use App\Http\Controllers\CashierStatusController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EncodeController;
 use App\Http\Controllers\EventController;
@@ -29,6 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('dashboard', DashboardController::class)->name('dashboard');
         Route::resource('stations', StationController::class)->only(['index', 'store', 'update']);
         Route::resource('cashiers', CashierController::class)->only(['index', 'store', 'update']);
+        Route::patch('cashiers/{cashier}/status', CashierStatusController::class)->name('cashiers.status');
     });
 
     Route::middleware('user.type:encoder')->group(function () {

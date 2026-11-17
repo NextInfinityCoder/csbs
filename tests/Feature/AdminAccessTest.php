@@ -17,6 +17,7 @@ dataset('admin-only requests', [
     'cashier list' => fn () => ['get', route('cashiers.index')],
     'create cashier' => fn () => ['post', route('cashiers.store')],
     'update cashier' => fn () => ['put', route('cashiers.update', User::factory()->cashier()->create())],
+    'change cashier status' => fn () => ['patch', route('cashiers.status', User::factory()->cashier()->create())],
 ]);
 
 test('non-admin users are forbidden from admin-only pages', function (User $user, array $request) {

@@ -149,3 +149,61 @@ test('cashier input is validated', function (array $input, string $invalidField)
     'unconfirmed password' => [['password_confirmation' => 'different'], 'password'],
     'unknown station' => [['station_id' => 999], 'station_id'],
 ]);
+
+test('admins can deactivate and reactivate a cashier', function () {
+    $cashier = User::factory()->cashier()->create();
+    $admin = User::factory()->create();
+
+    $this->actingAs($admin)
+        ->patch(route('cashiers.status', $cashier), ['is_active' => false])
+        ->assertRedirect()
+        ->assertSessionHasNoErrors();
+    expect($cashier->fresh()->is_active)->toBeFalse();
+
+    $this->actingAs($admin)
+        ->patch(route('cashiers.status', $cashier), ['is_active' => true]);
+    expect($cashier->fresh()->is_active)->toBeTrue();
+});
+
+test('the cashier list shows whether each cashier is active', function () {
+    User::factory()->cashier()->inactive()->create(['name' => 'Inactive Cashier']);
+
+    $this->actingAs(User::factory()->create())
+        ->get(route('cashiers.index'))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('cashiers.data.0.name', 'Inactive Cashier')
+            ->where('cashiers.data.0.is_active', false)
+        );
+});
+
+test('new cashiers are active', function () {
+    $this->actingAs(User::factory()->create())
+        ->post(route('cashiers.store'), [
+            'name' => 'New Cashier',
+            'email' => 'new@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+    expect(User::where('email', 'new@example.com')->sole()->is_active)->toBeTrue();
+});
+
+test('the cashier status must be a boolean', function () {
+    $cashier = User::factory()->cashier()->create();
+
+    $this->actingAs(User::factory()->create())
+        ->patch(route('cashiers.status', $cashier), ['is_active' => 'maybe'])
+        ->assertSessionHasErrors('is_active');
+
+    expect($cashier->fresh()->is_active)->toBeTrue();
+});
+
+test('only cashiers can be activated or deactivated here', function (string $state) {
+    $user = User::factory()->{$state}()->create();
+
+    $this->actingAs(User::factory()->create())
+        ->patch(route('cashiers.status', $user), ['is_active' => false])
+        ->assertNotFound();
+
+    expect($user->fresh()->is_active)->toBeTrue();
+})->with(['admin', 'encoder']);

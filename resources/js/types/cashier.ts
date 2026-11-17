@@ -8,6 +8,7 @@ export type Cashier = {
     email: string;
     type: UserType;
     station_id: number | null;
+    is_active: boolean;
     station: Pick<Station, 'id' | 'name'> | null;
     created_at: string;
     updated_at: string;

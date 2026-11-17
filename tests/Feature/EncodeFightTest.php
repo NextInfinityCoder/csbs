@@ -376,3 +376,40 @@ test('events that are not ongoing cannot be encoded', function (EventStatus $sta
 
     expect(Fight::count())->toBe(0);
 })->with([EventStatus::Upcoming, EventStatus::Completed, EventStatus::Cancelled]);
+
+test('only active cashiers are given the generated bets and claims', function () {
+    $event = Event::factory()->ongoing()->create(['commission_rate' => 10]);
+    $activeCashiers = User::factory()->count(2)->cashier()->create();
+    User::factory()->count(3)->cashier()->inactive()->create();
+
+    $this->actingAs(User::factory()->encoder()->create())
+        ->post(route('encode.store', $event), encodeEntry([
+            'meron_amount' => 20000,
+            'meron_bettors' => 60,
+            'wala_amount' => 20000,
+            'wala_bettors' => 60,
+        ]))
+        ->assertSessionHasNoErrors();
+
+    $activeIds = $activeCashiers->pluck('id')->all();
+
+    expect(Bet::count())->toBe(120)
+        ->and(Bet::whereNotIn('user_id', $activeIds)->count())->toBe(0)
+        ->and(Bet::whereNotNull('claim_from_user_id')->whereNotIn('claim_from_user_id', $activeIds)->count())->toBe(0);
+});
+
+test('encoding needs at least one active cashier', function () {
+    $event = Event::factory()->ongoing()->create();
+    User::factory()->count(2)->cashier()->inactive()->create();
+    $encoder = User::factory()->encoder()->create();
+
+    $this->actingAs($encoder)
+        ->get(route('encode.show', $event))
+        ->assertInertia(fn (Assert $page) => $page->where('hasCashiers', false));
+
+    $this->actingAs($encoder)
+        ->post(route('encode.store', $event), encodeEntry())
+        ->assertSessionHasErrors('cashiers');
+
+    expect(Fight::count())->toBe(0);
+});

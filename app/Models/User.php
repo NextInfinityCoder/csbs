@@ -22,6 +22,7 @@ use Laravel\Fortify\PasskeyAuthenticatable;
  * @property string $email
  * @property UserType $type
  * @property int|null $station_id
+ * @property bool $is_active
  * @property Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $two_factor_secret
@@ -32,7 +33,7 @@ use Laravel\Fortify\PasskeyAuthenticatable;
  * @property Carbon|null $updated_at
  * @property-read Station|null $station
  */
-#[Fillable(['name', 'email', 'password', 'type', 'station_id'])]
+#[Fillable(['name', 'email', 'password', 'type', 'station_id', 'is_active'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable implements PasskeyUser
 {
@@ -85,6 +86,17 @@ class User extends Authenticatable implements PasskeyUser
     }
 
     /**
+     * Scope the query to active users only.
+     *
+     * @param  Builder<User>  $query
+     */
+    #[Scope]
+    protected function active(Builder $query): void
+    {
+        $query->where('is_active', true);
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -96,6 +108,7 @@ class User extends Authenticatable implements PasskeyUser
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
             'type' => UserType::class,
+            'is_active' => 'boolean',
         ];
     }
 }

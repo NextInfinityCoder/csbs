@@ -90,8 +90,8 @@ class EncodeFightRequest extends FormRequest
                     $validator->errors()->add('meron_bettors', __('Add at least one bettor.'));
                 }
 
-                if (! User::query()->cashiers()->exists()) {
-                    $validator->errors()->add('cashiers', __('Create at least one cashier before encoding.'));
+                if (! User::query()->cashiers()->active()->exists()) {
+                    $validator->errors()->add('cashiers', __('Activate at least one cashier before encoding.'));
                 }
             },
         ];

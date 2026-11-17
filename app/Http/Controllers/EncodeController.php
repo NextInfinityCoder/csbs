@@ -47,7 +47,7 @@ class EncodeController extends Controller
             'nextFightNumber' => (int) $fights->max('fight_number') + 1,
             'defaultTimeOpen' => $fights->first()?->bet_closed?->format('H:i'),
             'today' => now()->toDateString(),
-            'hasCashiers' => User::query()->cashiers()->exists(),
+            'hasCashiers' => User::query()->cashiers()->active()->exists(),
         ]);
     }
 
@@ -56,7 +56,7 @@ class EncodeController extends Controller
      */
     public function store(EncodeFightRequest $request, Event $event, EncodeFight $encodeFight): RedirectResponse
     {
-        $fight = $encodeFight->handle($event, $request->validated(), User::query()->cashiers()->get());
+        $fight = $encodeFight->handle($event, $request->validated(), User::query()->cashiers()->active()->get());
 
         Inertia::flash('toast', [
             'type' => 'success',

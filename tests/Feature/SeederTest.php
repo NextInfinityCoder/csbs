@@ -35,7 +35,7 @@ test('the setup seeder creates one admin, one encoder, ten stations and a cashie
         $number = $index + 1;
 
         expect($cashier->name)->toBe("Cashier {$number}")
-            ->and($cashier->email)->toBe("cashier{$number}@example.com")
+            ->and($cashier->email)->toBe("cashier{$number}@csbs.com")
             ->and($cashier->station->name)->toBe("Station {$number}")
             ->and($cashier->hasVerifiedEmail())->toBeTrue();
     });
@@ -51,7 +51,7 @@ test('the seeded accounts can log in and land on their start page', function (st
 })->with([
     'admin' => ['admin@csbs.com', 'dashboard'],
     'encoder' => ['encoder@csbs.com', 'encode.index'],
-    'cashier' => ['cashier1@example.com', 'events.index'],
+    'cashier' => ['cashier1@csbs.com', 'events.index'],
 ]);
 
 test('the setup seeder can run again without duplicating or overwriting anything', function () {

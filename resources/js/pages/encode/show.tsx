@@ -85,10 +85,11 @@ export default function EncodeShow({
                 {!hasCashiers && (
                     <Alert variant="destructive">
                         <TriangleAlert />
-                        <AlertTitle>No cashiers yet</AlertTitle>
+                        <AlertTitle>No active cashiers</AlertTitle>
                         <AlertDescription>
-                            Bets are assigned to cashiers. Ask an admin to
-                            create at least one cashier before encoding.
+                            Bets are assigned to active cashiers only. Ask an
+                            admin to activate at least one cashier before
+                            encoding.
                         </AlertDescription>
                     </Alert>
                 )}

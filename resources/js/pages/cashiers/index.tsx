@@ -1,6 +1,7 @@
 import { Head } from '@inertiajs/react';
 import { Pencil, Plus, Users } from 'lucide-react';
 import CashierFormDialog from '@/components/cashier-form-dialog';
+import CashierStatusToggle from '@/components/cashier-status-toggle';
 import DataPagination from '@/components/data-pagination';
 import Heading from '@/components/heading';
 import { Badge } from '@/components/ui/badge';
@@ -90,8 +91,9 @@ export default function CashiersIndex({
                                         <TableHead>Name</TableHead>
                                         <TableHead>Email</TableHead>
                                         <TableHead>Station</TableHead>
+                                        <TableHead>Status</TableHead>
                                         <TableHead>Created</TableHead>
-                                        <TableHead className="w-12">
+                                        <TableHead className="w-44">
                                             <span className="sr-only">
                                                 Actions
                                             </span>
@@ -119,11 +121,27 @@ export default function CashiersIndex({
                                                 )}
                                             </TableCell>
                                             <TableCell>
+                                                <Badge
+                                                    variant={
+                                                        cashier.is_active
+                                                            ? 'success'
+                                                            : 'muted'
+                                                    }
+                                                >
+                                                    {cashier.is_active
+                                                        ? 'Active'
+                                                        : 'Inactive'}
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell>
                                                 {formatDateTime(
                                                     cashier.created_at,
                                                 )}
                                             </TableCell>
-                                            <TableCell className="text-right">
+                                            <TableCell className="flex items-center justify-end gap-1">
+                                                <CashierStatusToggle
+                                                    cashier={cashier}
+                                                />
                                                 <CashierFormDialog
                                                     cashier={cashier}
                                                     stations={stations}
