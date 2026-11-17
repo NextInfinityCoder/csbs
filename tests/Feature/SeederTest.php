@@ -45,9 +45,9 @@ test('the seeded accounts can log in and land on their start page', function (st
     $this->seed(SetupSeeder::class);
 
     $this->post(route('login.store'), ['email' => $email, 'password' => SetupSeeder::DEFAULT_PASSWORD])
-        ->assertRedirect(route('home.redirect'));
+        ->assertRedirect(route('home'));
 
-    $this->get(route('home.redirect'))->assertRedirect(route($expectedRoute));
+    $this->get(route('home'))->assertRedirect(route($expectedRoute));
 })->with([
     'admin' => ['admin@csbs.com', 'dashboard'],
     'encoder' => ['encoder@csbs.com', 'encode.index'],

@@ -13,11 +13,11 @@ use App\Http\Controllers\HomeRedirectController;
 use App\Http\Controllers\StationController;
 use Illuminate\Support\Facades\Route;
 
-Route::inertia('/', 'welcome')->name('home');
+Route::get('/', HomeRedirectController::class)
+    ->middleware(['auth', 'verified'])
+    ->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('home', HomeRedirectController::class)->name('home.redirect');
-
     Route::resource('events', EventController::class)->only(['index', 'show', 'store', 'update']);
     Route::get('events/{event}/z-report', EventZReportController::class)->name('events.z-report');
     Route::get('events/{event}/summary-report', EventSummaryReportController::class)->name('events.summary-report');

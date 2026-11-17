@@ -2,6 +2,7 @@
 
 use App\Models\Station;
 use App\Models\User;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 dataset('non-admin users', [
     'cashier' => fn () => User::factory()->cashier()->create(),
@@ -49,7 +50,7 @@ test('non-admin users can still open the shared pages', function (User $user, st
 
 test('the home redirect sends each user type to their start page', function (string $state, string $expectedRoute) {
     $this->actingAs(User::factory()->{$state}()->create())
-        ->get(route('home.redirect'))
+        ->get(route('home'))
         ->assertRedirect(route($expectedRoute));
 })->with([
     'admin' => ['admin', 'dashboard'],
@@ -63,10 +64,19 @@ test('users land on their start page after logging in', function (string $state,
     $this->post(route('login.store'), [
         'email' => $user->email,
         'password' => 'password',
-    ])->assertRedirect(route('home.redirect'));
+    ])->assertRedirect(route('home'));
 
-    $this->get(route('home.redirect'))->assertRedirect(route($expectedRoute));
+    $this->get(route('home'))->assertRedirect(route($expectedRoute));
 })->with([
     'admin' => ['admin', 'dashboard'],
     'cashier' => ['cashier', 'events.index'],
 ]);
+
+test('unverified users visiting the home page are asked to verify their email', function () {
+    $this->actingAs(User::factory()->unverified()->create())
+        ->get(route('home'))
+        ->assertRedirect(route('verification.notice'));
+})->skip(
+    fn (): bool => ! is_subclass_of(User::class, MustVerifyEmail::class),
+    'The User model does not require email verification.',
+);

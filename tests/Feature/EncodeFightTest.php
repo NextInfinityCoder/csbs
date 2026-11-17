@@ -239,7 +239,7 @@ test('only encoders can encode', function (string $state) {
 test('encoders land on the encode page and cannot open admin pages', function () {
     $encoder = User::factory()->encoder()->create();
 
-    $this->actingAs($encoder)->get(route('home.redirect'))->assertRedirect(route('encode.index'));
+    $this->actingAs($encoder)->get(route('home'))->assertRedirect(route('encode.index'));
     $this->actingAs($encoder)->get(route('dashboard'))->assertForbidden();
     $this->actingAs($encoder)->get(route('events.index'))->assertOk();
 });
