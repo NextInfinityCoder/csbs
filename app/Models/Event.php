@@ -16,6 +16,7 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property string $commission_rate
  * @property string $commission_amount
+ * @property string $multiplier
  * @property EventStatus $status
  * @property Carbon $date
  * @property Carbon|null $created_at
@@ -23,7 +24,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection<int, Fight> $fights
  * @property-read Collection<int, Bet> $bets
  */
-#[Fillable(['name', 'commission_rate', 'commission_amount', 'status', 'date'])]
+#[Fillable(['name', 'commission_rate', 'commission_amount', 'multiplier', 'status', 'date'])]
 class Event extends Model
 {
     /** @use HasFactory<EventFactory> */
@@ -59,6 +60,7 @@ class Event extends Model
         return [
             'commission_rate' => 'decimal:2',
             'commission_amount' => 'decimal:2',
+            'multiplier' => 'decimal:2',
             'status' => EventStatus::class,
             'date' => 'datetime',
         ];

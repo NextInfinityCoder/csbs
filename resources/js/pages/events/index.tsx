@@ -87,6 +87,9 @@ export default function EventsIndex({ events }: EventsIndexProps) {
                                             Com%
                                         </TableHead>
                                         <TableHead className="text-right">
+                                            Multiplier
+                                        </TableHead>
+                                        <TableHead className="text-right">
                                             Commission
                                         </TableHead>
                                         <TableHead>Date</TableHead>
@@ -112,6 +115,9 @@ export default function EventsIndex({ events }: EventsIndexProps) {
                                             </TableCell>
                                             <TableCell className="text-right tabular-nums">
                                                 {event.commission_rate}%
+                                            </TableCell>
+                                            <TableCell className="text-right tabular-nums">
+                                                {Number(event.multiplier)}×
                                             </TableCell>
                                             <TableCell className="text-right text-base font-semibold text-success tabular-nums">
                                                 {formatAmount(

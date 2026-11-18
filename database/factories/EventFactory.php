@@ -22,6 +22,7 @@ class EventFactory extends Factory
             'name' => fake()->city().' Derby',
             'commission_rate' => fake()->randomFloat(2, 5, 12),
             'commission_amount' => fake()->randomFloat(2, 0, 500000),
+            'multiplier' => 2,
             'status' => fake()->randomElement(EventStatus::cases()),
             'date' => fake()->dateTimeBetween('-3 months', '+1 month'),
         ];

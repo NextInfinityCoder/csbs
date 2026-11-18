@@ -18,3 +18,5 @@ export const eventStatusBadgeVariants: Record<
 };
 
 export const defaultCommissionRate = 7;
+
+export const defaultMultiplier = 2;

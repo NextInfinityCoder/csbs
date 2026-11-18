@@ -25,7 +25,11 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Spinner } from '@/components/ui/spinner';
-import { defaultCommissionRate, eventStatusLabels } from '@/lib/events';
+import {
+    defaultCommissionRate,
+    defaultMultiplier,
+    eventStatusLabels,
+} from '@/lib/events';
 import type { Event, EventStatus } from '@/types';
 
 /**
@@ -115,26 +119,51 @@ export default function EventFormDialog({
                                 <InputError message={errors.date} />
                             </div>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="event-commission-rate">
-                                    Commission rate (%)
-                                </Label>
-                                <Input
-                                    id="event-commission-rate"
-                                    name="commission_rate"
-                                    type="number"
-                                    inputMode="decimal"
-                                    min={0}
-                                    max={100}
-                                    step="0.01"
-                                    defaultValue={
-                                        event?.commission_rate ??
-                                        defaultCommissionRate
-                                    }
-                                    required
-                                    aria-invalid={!!errors.commission_rate}
-                                />
-                                <InputError message={errors.commission_rate} />
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="event-commission-rate">
+                                        Commission rate (%)
+                                    </Label>
+                                    <Input
+                                        id="event-commission-rate"
+                                        name="commission_rate"
+                                        type="number"
+                                        inputMode="decimal"
+                                        min={0}
+                                        max={100}
+                                        step="0.01"
+                                        defaultValue={
+                                            event?.commission_rate ??
+                                            defaultCommissionRate
+                                        }
+                                        required
+                                        aria-invalid={!!errors.commission_rate}
+                                    />
+                                    <InputError
+                                        message={errors.commission_rate}
+                                    />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label htmlFor="event-multiplier">
+                                        Multiplier
+                                    </Label>
+                                    <Input
+                                        id="event-multiplier"
+                                        name="multiplier"
+                                        type="number"
+                                        inputMode="decimal"
+                                        min={0}
+                                        step="0.01"
+                                        defaultValue={
+                                            event?.multiplier ??
+                                            defaultMultiplier
+                                        }
+                                        required
+                                        aria-invalid={!!errors.multiplier}
+                                    />
+                                    <InputError message={errors.multiplier} />
+                                </div>
                             </div>
 
                             <div className="grid gap-2">

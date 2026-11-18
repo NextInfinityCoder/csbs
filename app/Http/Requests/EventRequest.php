@@ -28,6 +28,7 @@ class EventRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'commission_rate' => ['required', 'numeric', 'between:0,100', 'decimal:0,2'],
+            'multiplier' => ['required', 'numeric', 'min:0', 'max:999999.99', 'decimal:0,2'],
             'status' => ['required', Rule::enum(EventStatus::class)],
             'date' => ['required', 'date'],
         ];
@@ -39,12 +40,12 @@ class EventRequest extends FormRequest
      * The form sends the date as an exact moment (with its UTC offset) so it is
      * stored correctly whatever timezone the browser is in.
      *
-     * @return array{name: string, commission_rate: string, status: string, date: Carbon}
+     * @return array{name: string, commission_rate: string, multiplier: string, status: string, date: Carbon}
      */
     public function eventAttributes(): array
     {
         return [
-            ...$this->safe()->only(['name', 'commission_rate', 'status']),
+            ...$this->safe()->only(['name', 'commission_rate', 'multiplier', 'status']),
             'date' => Carbon::parse($this->validated('date'))->setTimezone(config('app.timezone')),
         ];
     }

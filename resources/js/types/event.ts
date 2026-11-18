@@ -5,6 +5,7 @@ export type Event = {
     name: string;
     commission_rate: string;
     commission_amount: string;
+    multiplier: string;
     status: EventStatus;
     date: string;
     created_at: string;
